@@ -39,7 +39,7 @@ CREATE TABLE "Students" (
 	"Student_ID" SERIAL NOT NULL,
 	"Student_Name" TEXT NOT NULL UNIQUE,
 	"House_ID" INTEGER NOT NULL,
-	"Admission_Year" SMALLINT NOT NULL,
+	"Admission_Year" SMALLINT NOT NULL CONSTRAINT Relevant_Characters CHECK (Admission_Year > 1997),
 	"Plays_Quidditch" BOOLEAN NOT NULL,
 	CONSTRAINT Students_pk PRIMARY KEY ("Student_ID")
 ) WITH (
@@ -77,7 +77,7 @@ CREATE TABLE "Subjects" (
 	"Subject_Name" TEXT NOT NULL,
 	"Knowledge_Level" TEXT NOT NULL,
 	"Compulsory" BOOLEAN NOT NULL,
-	"Year" SMALLINT NOT NULL,
+	"Year" SMALLINT NOT NULL CONSTRAINT Relevant_Classes CHECK (Admission_Year > 1998),
 	CONSTRAINT Subjects_pk PRIMARY KEY ("Subject_ID")
 ) WITH (
   OIDS=FALSE
