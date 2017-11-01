@@ -1,20 +1,22 @@
 CREATE TABLE "Spells" (
-	"Spell ID" serial NOT NULL,
-	"Subject ID" integer NOT NULL,
-	"Spell Name" TEXT NOT NULL,
+	"Spell_ID" SERIAL NOT NULL,
+	"Subject_ID" INTEGER NOT NULL,
+	"Spell_Name" TEXT NOT NULL,
 	"Incantation" TEXT NOT NULL,
 	"Description" TEXT NOT NULL,
-	"Is an Unforgivable Curse" BOOLEAN NOT NULL,
-	CONSTRAINT Spells_pk PRIMARY KEY ("Spell ID")
+	"Unforgivable" BOOLEAN NOT NULL,
+	CONSTRAINT Spells_pk PRIMARY KEY ("Spell_ID")
 ) WITH (
   OIDS=FALSE
 );
 
 
 
-CREATE TABLE "Professor Classes" (
-	"Subject ID" integer NOT NULL,
-	"Professor ID" integer NOT NULL
+CREATE TABLE "Professor_Classes" (
+	"Subject_ID" INTEGER NOT NULL,
+	"Professor_ID" INTEGER NOT NULL,
+	CONSTRAINT Professor_Classes_pk0 PRIMARY KEY ("Subject_ID")
+	CONSTRAINT Professor_Classes_pk1 PRIMARY KEY ("Professor_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -22,11 +24,11 @@ CREATE TABLE "Professor Classes" (
 
 
 CREATE TABLE "Professors" (
-	"Professor ID" serial NOT NULL,
-	"Professor Name" TEXT NOT NULL UNIQUE,
-	"Is Head of House" BOOLEAN NOT NULL,
-	"Has a Permanent Teaching Post" BOOLEAN NOT NULL,
-	CONSTRAINT Professors_pk PRIMARY KEY ("Professor ID")
+	"Professor_ID" SERIAL NOT NULL,
+	"Professor_Name" TEXT NOT NULL UNIQUE,
+	"House_Head" BOOLEAN NOT NULL,
+	"Permanent_Post" BOOLEAN NOT NULL,
+	CONSTRAINT Professors_pk PRIMARY KEY ("Professor_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -34,12 +36,12 @@ CREATE TABLE "Professors" (
 
 
 CREATE TABLE "Students" (
-	"Student ID" serial NOT NULL,
-	"Student Name" TEXT NOT NULL UNIQUE,
-	"House ID" integer NOT NULL,
-	"Year of Admission" integer NOT NULL,
-	"Plays Quidditch" BOOLEAN NOT NULL,
-	CONSTRAINT Students_pk PRIMARY KEY ("Student ID")
+	"Student_ID" SERIAL NOT NULL,
+	"Student_Name" TEXT NOT NULL UNIQUE,
+	"House_ID" INTEGER NOT NULL,
+	"Admission_Year" SMALLINT NOT NULL,
+	"Plays_Quidditch" BOOLEAN NOT NULL,
+	CONSTRAINT Students_pk PRIMARY KEY ("Student_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -47,21 +49,23 @@ CREATE TABLE "Students" (
 
 
 CREATE TABLE "Houses" (
-	"House ID" serial NOT NULL,
-	"House Name" TEXT NOT NULL UNIQUE,
-	"House Symbol" TEXT NOT NULL UNIQUE,
-	"House Ghost" TEXT NOT NULL UNIQUE,
+	"House_ID" SERIAL NOT NULL,
+	"House_Name" TEXT NOT NULL UNIQUE,
+	"House_Symbol" TEXT NOT NULL UNIQUE,
+	"House_Ghost" TEXT NOT NULL UNIQUE,
 	"Founder" TEXT NOT NULL UNIQUE,
-	CONSTRAINT Houses_pk PRIMARY KEY ("House ID")
+	CONSTRAINT Houses_pk PRIMARY KEY ("House_ID")
 ) WITH (
   OIDS=FALSE
 );
 
 
 
-CREATE TABLE "Student Classes" (
-    "Subject ID" integer NOT NULL,
-	"Student ID" integer NOT NULL
+CREATE TABLE "Student_Classes" (
+    "Subject_ID" INTEGER NOT NULL,
+	"Student_ID" INTEGER NOT NULL,
+	CONSTRAINT Student_Classes_pk0 PRIMARY KEY ("Subject_ID")
+	CONSTRAINT Student_Classes_pk1 PRIMARY KEY ("Student_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -69,12 +73,12 @@ CREATE TABLE "Student Classes" (
 
 
 CREATE TABLE "Subjects" (
-	"Subject ID" serial NOT NULL,
-	"Subject Name" TEXT NOT NULL,
-	"Level of Knowledge" TEXT NOT NULL,
-	"Is Compulsory" BOOLEAN NOT NULL,
-	"Year" integer NOT NULL,
-	CONSTRAINT Subjects_pk PRIMARY KEY ("Subject ID")
+	"Subject_ID" SERIAL NOT NULL,
+	"Subject_Name" TEXT NOT NULL,
+	"Knowledge_Level" TEXT NOT NULL,
+	"Compulsory" BOOLEAN NOT NULL,
+	"Year" SMALLINT NOT NULL,
+	CONSTRAINT Subjects_pk PRIMARY KEY ("Subject_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -82,31 +86,31 @@ CREATE TABLE "Subjects" (
 
 
 CREATE TABLE "Objects" (
-	"Object ID" serial NOT NULL,
-	"Subject ID" integer NOT NULL,
-	"Object Name" TEXT NOT NULL,
+	"Object_ID" SERIAL NOT NULL,
+	"Subject_ID" INTEGER NOT NULL,
+	"Object_Name" TEXT NOT NULL,
 	"Description" TEXT NOT NULL,
-	CONSTRAINT Objects_pk PRIMARY KEY ("Object ID")
+	CONSTRAINT Objects_pk PRIMARY KEY ("Object_ID")
 ) WITH (
   OIDS=FALSE
 );
 
 
 
-ALTER TABLE "Spells" ADD CONSTRAINT "Spells_fk0" FOREIGN KEY ("Subject ID") REFERENCES "Subjects"("Subject ID");
+ALTER TABLE "Spells" ADD CONSTRAINT "Spells_fk0" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
 
-ALTER TABLE "Professor Classes" ADD CONSTRAINT "Professor Classes_fk0" FOREIGN KEY ("Subject ID") REFERENCES "Subjects"("Subject ID");
-ALTER TABLE "Professor Classes" ADD CONSTRAINT "Professor Classes_fk1" FOREIGN KEY ("Professor ID") REFERENCES "Professors"("Professor ID");
-
-
-ALTER TABLE "Students" ADD CONSTRAINT "Students_fk0" FOREIGN KEY ("House ID") REFERENCES "Houses"("House ID");
+ALTER TABLE "Professor_Classes" ADD CONSTRAINT "Professor Classes_fk0" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
+ALTER TABLE "Professor_Classes" ADD CONSTRAINT "Professor Classes_fk1" FOREIGN KEY ("Professor_ID") REFERENCES "Professors"("Professor_ID");
 
 
-ALTER TABLE "Student Classes" ADD CONSTRAINT "Student Classes_fk0" FOREIGN KEY ("Student ID") REFERENCES "Students"("Student ID");
-ALTER TABLE "Student Classes" ADD CONSTRAINT "Student Classes_fk1" FOREIGN KEY ("Subject ID") REFERENCES "Subjects"("Subject ID");
+ALTER TABLE "Students" ADD CONSTRAINT "Students_fk0" FOREIGN KEY ("House_ID") REFERENCES "Houses"("House_ID");
 
 
-ALTER TABLE "Objects" ADD CONSTRAINT "Objects_fk0" FOREIGN KEY ("Subject ID") REFERENCES "Subjects"("Subject ID");
+ALTER TABLE "Student_Classes" ADD CONSTRAINT "Student Classes_fk0" FOREIGN KEY ("Student_ID") REFERENCES "Students"("Student_ID");
+ALTER TABLE "Student_Classes" ADD CONSTRAINT "Student Classes_fk1" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
+
+
+ALTER TABLE "Objects" ADD CONSTRAINT "Objects_fk0" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
 
 
 
