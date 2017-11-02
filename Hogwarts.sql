@@ -39,7 +39,7 @@ CREATE TABLE "Students" (
 	"Student_Name" TEXT NOT NULL UNIQUE,
 	"House_ID" INTEGER NOT NULL,
 	"Admission_Year" SMALLINT NOT NULL,
-	CONSTRAINT Relevant_Characters CHECK ("Admission_Year" > 1997),
+	CONSTRAINT Relevant_Characters CHECK ("Admission_Year" > 1989),
 	"Plays_Quidditch" BOOLEAN NOT NULL,
 	CONSTRAINT Students_pk PRIMARY KEY ("Student_ID")
 ) WITH (
@@ -77,7 +77,7 @@ CREATE TABLE "Subjects" (
 	"Knowledge_Level" TEXT NOT NULL,
 	"Compulsory" BOOLEAN NOT NULL,
 	"Year" SMALLINT NOT NULL,
-	CONSTRAINT Relevant_Classes CHECK ("Year" > 1998),
+	CONSTRAINT Relevant_Classes CHECK ("Year" > 1989),
 	CONSTRAINT Subjects_pk PRIMARY KEY ("Subject_ID")
 ) WITH (
   OIDS=FALSE
@@ -116,10 +116,10 @@ ALTER TABLE "Objects" ADD CONSTRAINT "Objects_fk0" FOREIGN KEY ("Subject_ID") RE
 
 
 
-INSERT INTO "Houses" VALUES (1, 'Gryffindor', 'Lion', 'Nearly Headless Nick', 'Godrick Gryffindor');
-INSERT INTO "Houses" VALUES (2, 'Slytherin', 'Serpent', 'The Bloody Baron', 'Salazar Slytherin');
-INSERT INTO "Houses" VALUES (3, 'Ravenclaw', 'Raven', 'The Gray Lady', 'Rowena Ravenclaw');
-INSERT INTO "Houses" VALUES (4, 'Hufflepuff', 'Badger', 'The Fat Friar', 'Helga Hufflepuff');
+INSERT INTO "Houses" VALUES (DEFAULT, 'Gryffindor', 'Lion', 'Nearly Headless Nick', 'Godrick Gryffindor');
+INSERT INTO "Houses" VALUES (DEFAULT, 'Slytherin', 'Serpent', 'The Bloody Baron', 'Salazar Slytherin');
+INSERT INTO "Houses" VALUES (DEFAULT, 'Ravenclaw', 'Raven', 'The Gray Lady', 'Rowena Ravenclaw');
+INSERT INTO "Houses" VALUES (DEFAULT, 'Hufflepuff', 'Badger', 'The Fat Friar', 'Helga Hufflepuff');
 
 
 
@@ -150,7 +150,12 @@ INSERT INTO "Students" VALUES (11, 'Draco Malfoy', 2, 1991, TRUE);
 INSERT INTO "Students" VALUES (12, 'Cedric Diggory', 3, 1990, FALSE);
 INSERT INTO "Students" VALUES (13, 'Susan Bones', 4, 1991, FALSE);
 INSERT INTO "Students" VALUES (14, 'Padma Patil', 3, 1991, FALSE);
-INSERT INTO "Students" VALUES (15, 'Blaise Zabini', 2, 1991, FALSE);
+
+CREATE SEQUENCE "Student_Num";
+
+SELECT setval('"Student_Num"', (SELECT max("Student_ID") FROM "Students"));
+
+INSERT INTO "Students" VALUES (nextval('"Student_Num"'), 'Blaise Zabini', 2, 1991, FALSE);
 
 
 INSERT INTO "Subjects" VALUES (1, 'Defence Against The Dark Arts', 'Beginner', TRUE, 1991);
