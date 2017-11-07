@@ -136,6 +136,10 @@ INSERT INTO "Professors" VALUES (10, 'Rubeus Hagrid', FALSE, FALSE);
 INSERT INTO "Professors" VALUES (11, 'Cuthbert Binns', FALSE, TRUE);
 INSERT INTO "Professors" VALUES (12, 'Horace Slughorn', FALSE, FALSE);
 
+CREATE SEQUENCE "Professors_ID";
+SELECT setval('"Professors_ID"', (SELECT max("Professor_ID") FROM "Professors"));
+
+
 INSERT INTO "Students" VALUES (1, 'Harry Potter', 1, 1991, TRUE);
 INSERT INTO "Students" VALUES (2, 'Ronald Weasley', 1, 1991, FALSE);
 INSERT INTO "Students" VALUES (3, 'Hermione Granger', 1, 1991, FALSE);
@@ -151,11 +155,10 @@ INSERT INTO "Students" VALUES (12, 'Cedric Diggory', 3, 1990, FALSE);
 INSERT INTO "Students" VALUES (13, 'Susan Bones', 4, 1991, FALSE);
 INSERT INTO "Students" VALUES (14, 'Padma Patil', 3, 1991, FALSE);
 
-CREATE SEQUENCE "Student_Num";
+CREATE SEQUENCE "Students_ID";
+SELECT setval('"Students_ID"', (SELECT max("Student_ID") FROM "Students"));
 
-SELECT setval('"Student_Num"', (SELECT max("Student_ID") FROM "Students"));
-
-INSERT INTO "Students" VALUES (nextval('"Student_Num"'), 'Blaise Zabini', 2, 1991, FALSE);
+INSERT INTO "Students" VALUES (nextval('"Students_ID"'), 'Blaise Zabini', 2, 1991, FALSE);
 
 
 INSERT INTO "Subjects" VALUES (1, 'Defence Against The Dark Arts', 'Beginner', TRUE, 1991);
@@ -197,6 +200,9 @@ INSERT INTO "Subjects" VALUES (36, 'Potions', 'Intermediate', TRUE, 1994);
 INSERT INTO "Subjects" VALUES (37, 'Potions', 'Advanced Intermediate', TRUE, 1995);
 INSERT INTO "Subjects" VALUES (38, 'Potions', 'Advanced', TRUE, 1996);
 INSERT INTO "Subjects" VALUES (39, 'Potions', 'Advanced', TRUE, 1997);
+
+CREATE SEQUENCE "Subjects_ID";
+SELECT setval('"Subjects_ID"', (SELECT max("Subject_ID") FROM "Subjects"));
 
 
 
@@ -689,6 +695,10 @@ INSERT INTO "Spells" VALUES ( 51 , 23 , 'The Vanishing Spell', 'Evanesco', ' a T
 INSERT INTO "Spells" VALUES ( 52 , 24 , 'Crinus Muto', 'Crinus Muto', 'a Transfiguration spell that can be used to transform the colour and style of the casters hair.', FALSE);
 INSERT INTO "Spells" VALUES ( 53 , 24 , 'The Bird-Conjuring Charm', 'Avis', 'A spell that conjures a flock of birds. This charm is an advanced form of Transfiguration, taught at N.E.W.T.-level at Hogwarts School of Witchcraft and Wizardry.', FALSE);
 
+CREATE SEQUENCE "Spells_ID";
+SELECT setval('"Spells_ID"', (SELECT max("Spell_ID") FROM "Spells"));
+
+
 INSERT INTO "Objects" VALUES ( 1 , 1 , 'The Bowtruckle', 'A hand-sized, insect eating, tree dweller with long sharp fingers (two on each hand), brown eyes, and a general appearance of a flat-faced little stickman made of bark and twigs, which serves well as camouflage in its natural habitat.');
 INSERT INTO "Objects" VALUES ( 2 , 1 , 'Ghosts', 'Disembodied spirits of once-living wizards or witches.');
 INSERT INTO "Objects" VALUES ( 3 , 1 , 'The Fire Crab', 'A large, turtle-like crab creature native to the island of Fiji. It has six legs, and a heavily jewelled shell, with different colours. It is able to defend itself by shooting flames from its rear end when it is attacked.');
@@ -753,3 +763,6 @@ INSERT INTO "Objects" VALUES ( 61 , 38 , 'The Draught of Living Death', 'An extr
 INSERT INTO "Objects" VALUES ( 62 , 39 , 'The Polyjuice Potion', 'A potion that allows the drinker to assume the form of someone else. Its a complicated and challenging potion that even adult witches and wizards struggle to brew correctly. The potion is incredibly advanced and has two separate parts that contain steps for each part, when brewing is complete the potion has to stew for a month before usage.');
 INSERT INTO "Objects" VALUES ( 63 , 39 , 'The Euphoria Elixir', 'A sunshine-yellow potion that induces a sense of inexplicable, irrational happiness upon the drinker.');
 INSERT INTO "Objects" VALUES ( 64 , 39 , 'The Volubilis Potion', 'A potion that alters the drinkers voice. It will also restore their voice if they have lost it, and thus will end the effects of the Silencing Charm.');
+
+CREATE SEQUENCE "Objects_ID";
+SELECT setval('"Objects_ID"', (SELECT max("Object_ID") FROM "Objects"));
