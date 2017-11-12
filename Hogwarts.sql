@@ -1,11 +1,11 @@
 CREATE TABLE "Spells" (
 	"Spell_ID" SERIAL NOT NULL,
 	"Subject_ID" INTEGER NOT NULL,
-	"Spell_Name" TEXT NOT NULL,
-	"Incantation" TEXT NOT NULL,
-	"Description" TEXT NOT NULL,
+	"Spell_Name" VARCHAR(1000) NOT NULL,
+	"Incantation" VARCHAR(1000) NOT NULL,
+	"Description" VARCHAR(1000) NOT NULL,
 	"Unforgivable" BOOLEAN NOT NULL,
-	CONSTRAINT Spells_pk PRIMARY KEY ("Spell_ID")
+	CONSTRAINT Spells_PK PRIMARY KEY ("Spell_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -15,7 +15,7 @@ CREATE TABLE "Spells" (
 CREATE TABLE "Professor_Classes" (
 	"Subject_ID" INTEGER NOT NULL,
 	"Professor_ID" INTEGER NOT NULL,
-	CONSTRAINT Professor_Classes_pk PRIMARY KEY ("Subject_ID", "Professor_ID")
+	CONSTRAINT Professor_Classes_PK PRIMARY KEY ("Subject_ID", "Professor_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -24,10 +24,10 @@ CREATE TABLE "Professor_Classes" (
 
 CREATE TABLE "Professors" (
 	"Professor_ID" SERIAL NOT NULL,
-	"Professor_Name" TEXT NOT NULL UNIQUE,
+	"Professor_Name" VARCHAR(1000) NOT NULL UNIQUE,
 	"House_Head" BOOLEAN NOT NULL,
 	"Permanent_Post" BOOLEAN NOT NULL,
-	CONSTRAINT Professors_pk PRIMARY KEY ("Professor_ID")
+	CONSTRAINT Professors_PK PRIMARY KEY ("Professor_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -36,12 +36,12 @@ CREATE TABLE "Professors" (
 
 CREATE TABLE "Students" (
 	"Student_ID" SERIAL NOT NULL,
-	"Student_Name" TEXT NOT NULL UNIQUE,
+	"Student_Name" VARCHAR(1000) NOT NULL UNIQUE,
 	"House_ID" INTEGER NOT NULL,
 	"Admission_Year" SMALLINT NOT NULL,
 	CONSTRAINT Relevant_Characters CHECK ("Admission_Year" > 1989),
 	"Plays_Quidditch" BOOLEAN NOT NULL,
-	CONSTRAINT Students_pk PRIMARY KEY ("Student_ID")
+	CONSTRAINT Students_PK PRIMARY KEY ("Student_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -50,11 +50,11 @@ CREATE TABLE "Students" (
 
 CREATE TABLE "Houses" (
 	"House_ID" SERIAL NOT NULL,
-	"House_Name" TEXT NOT NULL UNIQUE,
-	"House_Symbol" TEXT NOT NULL UNIQUE,
-	"House_Ghost" TEXT NOT NULL UNIQUE,
-	"Founder" TEXT NOT NULL UNIQUE,
-	CONSTRAINT Houses_pk PRIMARY KEY ("House_ID")
+	"House_Name" VARCHAR(1000) NOT NULL UNIQUE,
+	"House_Symbol" VARCHAR(1000) NOT NULL UNIQUE,
+	"House_Ghost" VARCHAR(1000) NOT NULL UNIQUE,
+	"Founder" VARCHAR(1000) NOT NULL UNIQUE,
+	CONSTRAINT Houses_PK PRIMARY KEY ("House_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -64,7 +64,7 @@ CREATE TABLE "Houses" (
 CREATE TABLE "Student_Classes" (
     "Subject_ID" INTEGER NOT NULL,
 	"Student_ID" INTEGER NOT NULL,
-	CONSTRAINT Student_Classes_pk PRIMARY KEY ("Subject_ID", "Student_ID")
+	CONSTRAINT Student_Classes_PK PRIMARY KEY ("Subject_ID", "Student_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -73,12 +73,12 @@ CREATE TABLE "Student_Classes" (
 
 CREATE TABLE "Subjects" (
 	"Subject_ID" SERIAL NOT NULL,
-	"Subject_Name" TEXT NOT NULL,
-	"Knowledge_Level" TEXT NOT NULL,
+	"Subject_Name" VARCHAR(1000) NOT NULL,
+	"Knowledge_Level" VARCHAR(1000) NOT NULL,
 	"Compulsory" BOOLEAN NOT NULL,
 	"Year" SMALLINT NOT NULL,
 	CONSTRAINT Relevant_Classes CHECK ("Year" > 1989),
-	CONSTRAINT Subjects_pk PRIMARY KEY ("Subject_ID")
+	CONSTRAINT Subjects_PK PRIMARY KEY ("Subject_ID")
 ) WITH (
   OIDS=FALSE
 );
@@ -88,29 +88,29 @@ CREATE TABLE "Subjects" (
 CREATE TABLE "Objects" (
 	"Object_ID" SERIAL NOT NULL,
 	"Subject_ID" INTEGER NOT NULL,
-	"Object_Name" TEXT NOT NULL,
-	"Description" TEXT NOT NULL,
-	CONSTRAINT Objects_pk PRIMARY KEY ("Object_ID")
+	"Object_Name" VARCHAR(1000) NOT NULL,
+	"Description" VARCHAR(1000) NOT NULL,
+	CONSTRAINT Objects_PK PRIMARY KEY ("Object_ID")
 ) WITH (
   OIDS=FALSE
 );
 
 
 
-ALTER TABLE "Spells" ADD CONSTRAINT "Spells_fk0" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
+ALTER TABLE "Spells" ADD CONSTRAINT "Spells_Subject_ID_FK" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
 
-ALTER TABLE "Professor_Classes" ADD CONSTRAINT "Professor_Classes_fk0" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
-ALTER TABLE "Professor_Classes" ADD CONSTRAINT "Professor_Classes_fk1" FOREIGN KEY ("Professor_ID") REFERENCES "Professors"("Professor_ID");
-
-
-ALTER TABLE "Students" ADD CONSTRAINT "Students_fk0" FOREIGN KEY ("House_ID") REFERENCES "Houses"("House_ID");
+ALTER TABLE "Professor_Classes" ADD CONSTRAINT "Professor_Classes_Subject_ID_FK" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
+ALTER TABLE "Professor_Classes" ADD CONSTRAINT "Professor_Classes_Professor_ID_FK" FOREIGN KEY ("Professor_ID") REFERENCES "Professors"("Professor_ID");
 
 
-ALTER TABLE "Student_Classes" ADD CONSTRAINT "Student_Classes_fk0" FOREIGN KEY ("Student_ID") REFERENCES "Students"("Student_ID");
-ALTER TABLE "Student_Classes" ADD CONSTRAINT "Student_Classes_fk1" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
+ALTER TABLE "Students" ADD CONSTRAINT "Students_House_ID_FK" FOREIGN KEY ("House_ID") REFERENCES "Houses"("House_ID");
 
 
-ALTER TABLE "Objects" ADD CONSTRAINT "Objects_fk0" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
+ALTER TABLE "Student_Classes" ADD CONSTRAINT "Student_Classes_Student_ID_FK" FOREIGN KEY ("Student_ID") REFERENCES "Students"("Student_ID");
+ALTER TABLE "Student_Classes" ADD CONSTRAINT "Student_Classes_Subject_ID_FK" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
+
+
+ALTER TABLE "Objects" ADD CONSTRAINT "Objects_Subject_ID_FK" FOREIGN KEY ("Subject_ID") REFERENCES "Subjects"("Subject_ID");
 
 
 
@@ -136,9 +136,7 @@ INSERT INTO "Professors" VALUES (10, 'Rubeus Hagrid', FALSE, FALSE);
 INSERT INTO "Professors" VALUES (11, 'Cuthbert Binns', FALSE, TRUE);
 INSERT INTO "Professors" VALUES (12, 'Horace Slughorn', FALSE, FALSE);
 
-CREATE SEQUENCE "Professors_ID";
-SELECT setval('"Professors_ID"', (SELECT max("Professor_ID") FROM "Professors"));
-
+SELECT setval('"Professors_Professor_ID_seq"', (SELECT max("Professor_ID") FROM "Professors"));
 
 INSERT INTO "Students" VALUES (1, 'Harry Potter', 1, 1991, TRUE);
 INSERT INTO "Students" VALUES (2, 'Ronald Weasley', 1, 1991, FALSE);
@@ -155,10 +153,9 @@ INSERT INTO "Students" VALUES (12, 'Cedric Diggory', 3, 1990, FALSE);
 INSERT INTO "Students" VALUES (13, 'Susan Bones', 4, 1991, FALSE);
 INSERT INTO "Students" VALUES (14, 'Padma Patil', 3, 1991, FALSE);
 
-CREATE SEQUENCE "Students_ID";
-SELECT setval('"Students_ID"', (SELECT max("Student_ID") FROM "Students"));
+SELECT setval('"Students_Student_ID_seq"', (SELECT max("Student_ID") FROM "Students"));
 
-INSERT INTO "Students" VALUES (nextval('"Students_ID"'), 'Blaise Zabini', 2, 1991, FALSE);
+INSERT INTO "Students" VALUES (DEFAULT, 'Blaise Zabini', 2, 1991, FALSE);
 
 
 INSERT INTO "Subjects" VALUES (1, 'Defence Against The Dark Arts', 'Beginner', TRUE, 1991);
@@ -201,8 +198,8 @@ INSERT INTO "Subjects" VALUES (37, 'Potions', 'Advanced Intermediate', TRUE, 199
 INSERT INTO "Subjects" VALUES (38, 'Potions', 'Advanced', TRUE, 1996);
 INSERT INTO "Subjects" VALUES (39, 'Potions', 'Advanced', TRUE, 1997);
 
-CREATE SEQUENCE "Subjects_ID";
-SELECT setval('"Subjects_ID"', (SELECT max("Subject_ID") FROM "Subjects"));
+
+SELECT setval('"Subjects_Subject_ID_seq"', (SELECT max("Subject_ID") FROM "Subjects"));
 
 
 
@@ -695,8 +692,8 @@ INSERT INTO "Spells" VALUES ( 51 , 23 , 'The Vanishing Spell', 'Evanesco', ' a T
 INSERT INTO "Spells" VALUES ( 52 , 24 , 'Crinus Muto', 'Crinus Muto', 'a Transfiguration spell that can be used to transform the colour and style of the casters hair.', FALSE);
 INSERT INTO "Spells" VALUES ( 53 , 24 , 'The Bird-Conjuring Charm', 'Avis', 'A spell that conjures a flock of birds. This charm is an advanced form of Transfiguration, taught at N.E.W.T.-level at Hogwarts School of Witchcraft and Wizardry.', FALSE);
 
-CREATE SEQUENCE "Spells_ID";
-SELECT setval('"Spells_ID"', (SELECT max("Spell_ID") FROM "Spells"));
+
+SELECT setval('"Spells_Spell_ID_seq"', (SELECT max("Spell_ID") FROM "Spells"));
 
 
 INSERT INTO "Objects" VALUES ( 1 , 1 , 'The Bowtruckle', 'A hand-sized, insect eating, tree dweller with long sharp fingers (two on each hand), brown eyes, and a general appearance of a flat-faced little stickman made of bark and twigs, which serves well as camouflage in its natural habitat.');
@@ -764,5 +761,5 @@ INSERT INTO "Objects" VALUES ( 62 , 39 , 'The Polyjuice Potion', 'A potion that 
 INSERT INTO "Objects" VALUES ( 63 , 39 , 'The Euphoria Elixir', 'A sunshine-yellow potion that induces a sense of inexplicable, irrational happiness upon the drinker.');
 INSERT INTO "Objects" VALUES ( 64 , 39 , 'The Volubilis Potion', 'A potion that alters the drinkers voice. It will also restore their voice if they have lost it, and thus will end the effects of the Silencing Charm.');
 
-CREATE SEQUENCE "Objects_ID";
-SELECT setval('"Objects_ID"', (SELECT max("Object_ID") FROM "Objects"));
+
+SELECT setval('"Objects_Object_ID_seq"', (SELECT max("Object_ID") FROM "Objects"));
