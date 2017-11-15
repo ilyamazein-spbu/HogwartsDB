@@ -745,10 +745,10 @@ INSERT INTO "Objects" VALUES ( 46 , 33 , 'The Herbicide Potion', 'A potion that 
 INSERT INTO "Objects" VALUES ( 47 , 34 , 'The Sleeping Draught', 'A potion that causes the drinker to fall almost instantaneously into a deep but temporary sleep.');
 INSERT INTO "Objects" VALUES ( 48 , 34 , 'The Swelling Solution', 'A potion which causes whatever it touches to swell in size; its three key ingredients (the only ingredients in it) are bat spleens, dried nettles, and puffer-fish eyes.');
 INSERT INTO "Objects" VALUES ( 49 , 34 , 'The Hair-Raising Potion', 'A potion that causes the drinkers hair to stand on end. One of the known ingredients is rat tails.');
-INSERT INTO "Objects" VALUES ( 50 , 35 , 'The Antidote to Uncommon Poisons', 'a potion that cures minor magical or uncommon poisons such as doxy bites. The ingredients required are fire seed, graphorn horn, billywig stings and chizpurfle carapaces.');
+INSERT INTO "Objects" VALUES ( 50 , 35 , 'The Antidote to Uncommon Poisons', 'A potion that cures minor magical or uncommon poisons such as doxy bites. The ingredients required are fire seed, graphorn horn, billywig stings and chizpurfle carapaces.');
 INSERT INTO "Objects" VALUES ( 51 , 35 , 'The Shrinking Solution', 'A potion that causes the drinker to shrink to a younger form. It is bright green when brewed correctly and, if prepared incorrectly, it can apparently be poisonous.');
 INSERT INTO "Objects" VALUES ( 52 , 35 , 'The Girding Potion', 'A potion that gives the consumer extra endurance. It presumably has a rather foul odour, as Hermione Granger noted when making it in 1996.');
-INSERT INTO "Objects" VALUES ( 53 , 36 , 'Skelegro', 'a dreadful-tasting potion which causes vanished or otherwise lost bones to regrow in a notably slow and painful process.');
+INSERT INTO "Objects" VALUES ( 53 , 36 , 'Skelegro', 'A dreadful-tasting potion which causes vanished or otherwise lost bones to regrow in a notably slow and painful process.');
 INSERT INTO "Objects" VALUES ( 54 , 36 , 'The Hiccoughing Solution', 'A potion that causes hiccoughs.');
 INSERT INTO "Objects" VALUES ( 55 , 36 , 'The Wit-Sharpening Potion', 'A potion which allows the drinker to think more clearly. Due to this, it acts a a counteragent to the Confundus Charm.');
 INSERT INTO "Objects" VALUES ( 56 , 37 , 'The Invigoration Draught', 'A potion which boosts the drinkers energy.');
