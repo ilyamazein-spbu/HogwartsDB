@@ -38,7 +38,7 @@ EXPLAIN SELECT "Student_Name" AS "Players"
 	
 "Seq Scan on 'Students'  (cost=0.00..1.19 rows=1 width=516)"
 
-CREATE INDEX ON "Students"("Student_Name");
+CREATE INDEX ON "Students"("Plays_Quidditch", "Admission_Year");
 SET enable_seqscan TO off;
 
 EXPLAIN SELECT "Student_Name" AS "Players"
@@ -46,7 +46,7 @@ EXPLAIN SELECT "Student_Name" AS "Players"
 		WHERE "Plays_Quidditch" = TRUE AND "Admission_Year" = 1991
 	ORDER BY "Student_Name";
 
-"Index Scan using 'Students_Student_Name_idx' on 'Students'  (cost=0.14..12.40 rows=1 width=516)"
+"Index Scan using 'Students_Plays_Quidditch_Admission_Year_idx' on 'Students'  (cost=0.14..8.15 rows=1 width=516)"
 
 
 	"Заклинания с неизвестными произношениями, не являющиеся запретными"
@@ -65,7 +65,7 @@ EXPLAIN SELECT "Spell_Name" AS "Unknown Spells"
 	
 "Seq Scan on 'Spells'  (cost=0.00..2.66 rows=10 width=20)"
 
-CREATE INDEX ON "Spells"("Spell_Name");
+CREATE INDEX ON "Spells"("Unforgivable", "Incantation");
 SET enable_seqscan TO off;
 
 EXPLAIN SELECT "Spell_Name" AS "Unknown Spells"
@@ -73,7 +73,7 @@ EXPLAIN SELECT "Spell_Name" AS "Unknown Spells"
 		WHERE "Unforgivable" = FALSE AND "Incantation" = 'unknown'
 	ORDER BY "Spell_Name";
 
-"Index Scan using 'Spells_Spell_Name_idx' on 'Spells'  (cost=0.14..17.00 rows=10 width=20)"
+"Bitmap Index Scan on 'Spells_Unforgivable_Incantation_idx'  (cost=0.00..4.24 rows=10 width=0)"
 
 
 	"Предметы, у которых есть Высший уровень сложности"
@@ -90,14 +90,14 @@ EXPLAIN SELECT DISTINCT "Subject_Name" AS "Advanced Studies"
 		
 "Seq Scan on 'Subjects'  (cost=0.00..1.49 rows=1 width=516)"
 
-CREATE INDEX ON "Subjects"("Subject_Name");
+CREATE INDEX ON "Subjects"("Knowledge_Level");
 SET enable_seqscan TO off;
 
 EXPLAIN SELECT DISTINCT "Subject_Name" AS "Advanced Studies"
 	FROM "Subjects"
 		WHERE "Knowledge_Level" = 'Advanced';
 
-"Index Scan using 'Subjects_Subject_Name_idx' on 'Subjects'  (cost=0.14..12.82 rows=1 width=516)"
+"Index Scan using 'Subjects_Knowledge_Level_idx' on 'Subjects'  (cost=0.14..8.16 rows=1 width=516)"
 
 		
 	"Профессора, которые постоянно преподают в Хогвартс и не являются главами домов"
@@ -114,14 +114,14 @@ EXPLAIN SELECT "Professor_Name" AS "Regular Professors"
 		
 "Seq Scan on 'Professors'  (cost=0.00..1.12 rows=3 width=516)"
 
-CREATE INDEX ON "Professors"("House_Head");
+CREATE INDEX ON "Professors"("House_Head", "Permanent_Post");
 SET enable_seqscan TO off;
 
 EXPLAIN SELECT "Professor_Name" AS "Regular Professors"
 	FROM "Professors"
 		WHERE "House_Head" = FALSE AND "Permanent_Post" = TRUE;
 
-"Index Scan using 'Professors_House_Head_idx' on 'Professors'  (cost=0.14..8.24 rows=3 width=516)"
+"Index Scan using 'Professors_House_Head_Permanent_Post_idx' on 'Professors'  (cost=0.14..8.20 rows=3 width=516)"
 
 
 	"Список зельев, в порядке их изучения"
