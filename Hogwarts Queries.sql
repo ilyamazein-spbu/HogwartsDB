@@ -49,31 +49,31 @@ EXPLAIN SELECT "Student_Name" AS "Players"
 "Index Scan using 'Students_Plays_Quidditch_Admission_Year_idx' on 'Students'  (cost=0.14..8.15 rows=1 width=516)"
 
 
-	"Заклинания с неизвестными произношениями, не являющиеся запретными"
+	"Заклинания с неизвестными произношениями, в алфавитном порядке"
 
 SELECT "Spell_Name" AS "Unknown Spells"
 	FROM "Spells"
-		WHERE "Unforgivable" = FALSE AND "Incantation" = 'unknown'
+		WHERE "Incantation" = 'unknown'
 	ORDER BY "Spell_Name";
 
 "Оптимизация"
 
 EXPLAIN SELECT "Spell_Name" AS "Unknown Spells"
 	FROM "Spells"
-		WHERE "Unforgivable" = FALSE AND "Incantation" = 'unknown'
+		WHERE "Incantation" = 'unknown'
 	ORDER BY "Spell_Name";
 	
-"Seq Scan on 'Spells'  (cost=0.00..2.66 rows=10 width=20)"
+"Seq Scan on 'Spells'  (cost=0.00..2.66 rows=11 width=20)"
 
-CREATE INDEX ON "Spells"("Unforgivable", "Incantation");
+CREATE INDEX ON "Spells"("Incantation");
 SET enable_seqscan TO off;
 
 EXPLAIN SELECT "Spell_Name" AS "Unknown Spells"
 	FROM "Spells"
-		WHERE "Unforgivable" = FALSE AND "Incantation" = 'unknown'
+		WHERE "Incantation" = 'unknown'
 	ORDER BY "Spell_Name";
 
-"Bitmap Index Scan on 'Spells_Unforgivable_Incantation_idx'  (cost=0.00..4.24 rows=10 width=0)"
+"Bitmap Index Scan on 'Spells_Incantation_idx'  (cost=0.00..4.22 rows=11 width=0)"
 
 
 	"Предметы, у которых есть Высший уровень сложности"
@@ -157,6 +157,36 @@ ORDER BY "Year";
 "Index Scan using 'Subjects_Subject_Name_idx' on 'Subjects'  (cost=0.14..8.16 rows=1 width=6)"
 
 
+	"Список предметов и количества лет, которые они преподаются, с какого по какой год"
+
+SELECT "Subject_Name" AS "Subject", COUNT("Sub_Prof_Clas"."Year") AS "Years of Study", MIN("Year") AS "From", MAX("Year") AS "To" FROM
+("Subjects" LEFT JOIN "Professor_Classes" ON ("Subjects"."Subject_ID" = "Professor_Classes"."Subject_ID")) AS "Sub_Prof_Clas"
+GROUP BY "Subject_Name"
+ORDER BY "Subject_Name";
+
+"Оптимизация"
+
+EXPLAIN SELECT "Subject_Name" AS "Subject", COUNT("Sub_Prof_Clas"."Year") AS "Years of Study", MIN("Year") AS "From", MAX("Year") AS "To" FROM
+("Subjects" LEFT JOIN "Professor_Classes" ON ("Subjects"."Subject_ID" = "Professor_Classes"."Subject_ID")) AS "Sub_Prof_Clas"
+GROUP BY "Subject_Name"
+ORDER BY "Subject_Name";
+
+"Seq Scan on 'Subjects'  (cost=0.00..1.39 rows=39 width=522)"
+"Seq Scan on 'Professor_Classes'  (cost=0.00..1.39 rows=39 width=4)"
+
+CREATE INDEX ON "Subjects"("Subject_ID");
+CREATE INDEX ON "Professor_Classes"("Subject_ID");
+SET enable_seqscan TO off;
+
+EXPLAIN SELECT "Subject_Name" AS "Subject", COUNT("Sub_Prof_Clas"."Year") AS "Years of Study", MIN("Year") AS "From", MAX("Year") AS "To" FROM
+("Subjects" LEFT JOIN "Professor_Classes" ON ("Subjects"."Subject_ID" = "Professor_Classes"."Subject_ID")) AS "Sub_Prof_Clas"
+GROUP BY "Subject_Name"
+ORDER BY "Subject_Name";
+
+"Index Scan using 'Subjects_Subject_ID_idx' on 'Subjects'  (cost=0.14..12.73 rows=39 width=522)"
+"Index Only Scan using 'Professor_Classes_Subject_ID_idx' on 'Professor_Classes'  (cost=0.14..12.73 rows=39 width=4)"
+
+
 "Во всех представленных случаях использование индексов является более затратным, поскольку таблицы в базе данные не настолько большие, чтобы оно было эффективным. Идексы представлют данные как дерево, но на таком объеме данных алгоритмы на дереве не будут лучше последовательного сканирования."
 
 
@@ -204,11 +234,3 @@ WHERE "Number of Students" = (SELECT MAX("Number of Students") FROM
 (SELECT "House_Name" AS "House", COUNT("Student_ID") AS "Number of Students" FROM
 ("Houses" LEFT JOIN "Students" ON ("Houses"."House_ID" = "Students"."House_ID")) AS "House_Students"
 GROUP BY "House_Name") AS "House_Numbers");
-
-
-	"Список предметов и количества лет, которые они преподаются, с какого по какой год"
-
-SELECT "Subject_Name" AS "Subject", COUNT("Sub_Prof_Clas"."Year") AS "Years of Study", MIN("Year") AS "From", MAX("Year") AS "To" FROM
-("Subjects" LEFT JOIN "Professor_Classes" ON ("Subjects"."Subject_ID" = "Professor_Classes"."Subject_ID")) AS "Sub_Prof_Clas"
-GROUP BY "Subject_Name"
-ORDER BY "Subject_Name";

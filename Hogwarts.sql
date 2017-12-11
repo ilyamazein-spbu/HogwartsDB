@@ -1,3 +1,10 @@
+DROP DATABASE IF EXISTS "Hogwarts";
+CREATE DATABASE "Hogwarts" WITH ENCODING='UTF8';
+
+\c "Hogwarts";
+
+
+
 CREATE TABLE "Spells" (
 	"Spell_ID" SERIAL NOT NULL,
 	"Subject_ID" INTEGER NOT NULL,
@@ -182,9 +189,9 @@ INSERT INTO "Subjects" VALUES (21, 'Transfiguration', 'Beginner Intermediate', T
 INSERT INTO "Subjects" VALUES (22, 'Transfiguration', 'Intermediate', TRUE, 1994);
 INSERT INTO "Subjects" VALUES (23, 'Transfiguration', 'Advanced Intermediate', TRUE, 1995);
 INSERT INTO "Subjects" VALUES (24, 'Transfiguration', 'Advanced', TRUE, 1996);
-INSERT INTO "Subjects" VALUES (25, 'Care of Magical Creatures', 'Beginner Intermediate', TRUE, 1993);
-INSERT INTO "Subjects" VALUES (26, 'Care of Magical Creatures', 'Intermediate', TRUE, 1994);
-INSERT INTO "Subjects" VALUES (27, 'Care of Magical Creatures', 'Advanced Intermediate', TRUE, 1995);
+INSERT INTO "Subjects" VALUES (25, 'Care of Magical Creatures', 'Beginner Intermediate', FALSE, 1993);
+INSERT INTO "Subjects" VALUES (26, 'Care of Magical Creatures', 'Intermediate', FALSE, 1994);
+INSERT INTO "Subjects" VALUES (27, 'Care of Magical Creatures', 'Advanced Intermediate', FALSE, 1995);
 INSERT INTO "Subjects" VALUES (28, 'History of Magic', 'Beginner', TRUE, 1991);
 INSERT INTO "Subjects" VALUES (29, 'History of Magic', 'Beginner', TRUE, 1992);
 INSERT INTO "Subjects" VALUES (30, 'History of Magic', 'Beginner Intermediate', TRUE, 1993);
