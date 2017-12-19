@@ -234,3 +234,29 @@ WHERE "Number of Students" = (SELECT MAX("Number of Students") FROM
 (SELECT "House_Name" AS "House", COUNT("Student_ID") AS "Number of Students" FROM
 ("Houses" LEFT JOIN "Students" ON ("Houses"."House_ID" = "Students"."House_ID")) AS "House_Students"
 GROUP BY "House_Name") AS "House_Numbers");
+
+
+
+"Дополнительные запросы"
+
+
+	"Процентная посещаемость предметов по выбору в параллели Гарри Поттера"
+	
+SELECT  "Subject_Name" AS "Subject Name", "Year", "Number_of_Students" AS "Attendance Percentage" FROM ("Subjects" JOIN (SELECT "Subject_ID" AS "Subject",
+COUNT("Student_Name")/(SELECT COUNT("Students"."Student_Name") FROM "Students" WHERE "Admission_Year" = 1991)::float*100 AS "Number_of_Students" FROM
+("Student_Classes" LEFT JOIN "Students" ON ("Student_Classes"."Student_ID" = "Students"."Student_ID")) AS "Classes_Students"
+GROUP BY "Subject_ID") AS "Attendance" ON ("Subjects"."Subject_ID" = "Attendance"."Subject"))
+WHERE "Compulsory" = FALSE;
+
+
+	"Заклинания и другие вещи, изучаемые на каждом предмете (по годам)"
+	
+SELECT "Subject_Name" AS "Subject Name", "Year", "Ob" AS "Objects", "Sp" AS "Spells" FROM
+(SELECT "Subjects"."Subject_ID" AS "Sub_ID", "Subject_Name", "Year", string_agg("Object_Name", ', ') AS "Ob"
+FROM ("Subjects" LEFT JOIN "Objects" ON ("Subjects"."Subject_ID" = "Objects"."Subject_ID"))
+GROUP BY "Subjects"."Subject_ID" ORDER BY "Sub_ID") AS "Subjects_Objects"
+JOIN
+(SELECT "Subjects"."Subject_ID" AS "Sub_ID", string_agg("Spell_Name", ', ') AS "Sp"
+FROM ("Subjects" LEFT JOIN "Spells" ON ("Subjects"."Subject_ID" = "Spells"."Subject_ID"))
+GROUP BY "Subjects"."Subject_ID" ORDER BY "Sub_ID") AS "Subjects_Spells"
+ON ("Subjects_Objects"."Sub_ID" = "Subjects_Spells"."Sub_ID");
